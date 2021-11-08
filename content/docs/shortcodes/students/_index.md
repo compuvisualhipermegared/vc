@@ -6,4 +6,6 @@ bookCollapseSection: true
 
 Hi, we're compuvisualhipermegared!
 
+https://github.com/compuvisualhipermegared/vc
+
 {{<section>}}
