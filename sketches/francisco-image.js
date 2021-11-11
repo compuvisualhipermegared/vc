@@ -8,11 +8,11 @@ let img;
 // preload() makes sure image is loaded before anything else occurs
 function preload() {
   // load the original image
-  img = loadImage("https://pbs.twimg.com/profile_images/1455350332922400770/OXsbHNhN_200x200.jpg");  
+  img = loadImage("https://pbs.twimg.com/profile_images/1455350332922400770/OXsbHNhN_400x400.jpg");  
 }
 // setup() runs after preload, once()
 function setup() {
-  createCanvas(200, 200);
+  createCanvas(400, 400);
   pixelDensity(1);
   frameRate(30);
 }
