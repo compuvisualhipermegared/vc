@@ -1,6 +1,6 @@
 # Φρανσισκο δενασ (Francisco Dueñas)
 
-{{< p5-iframe sketch="/vc/sketches/francisco-image.js" width="220" height="224">}}
+{{< p5-iframe sketch="/vc/sketches/francisco-image.js" width="420" height="424">}}
 
 Hi, I'm Francisco Dueñas and this is my blog, welcome!
 
