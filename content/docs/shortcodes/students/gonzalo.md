@@ -1,7 +1,6 @@
 # Gonzalo
 
-Hi, I'm Gonzalo
-
-## Workshop 1
+## The Ebbinghaus Illusion
+La ilusión de Ebbinghaus, también conocida como los círculos de Titchener, consiste en una disparidad en la percepción del tamaño de un objeto. La ilusión se produce cuando se rodea el círculo central por círculos más grandes o más pequeños que forman un anillo alrededor de él. Cuando se colocan dos círculos del mismo tamaño uno al lado del otro y se rodean por círculos más grandes en uno y más pequeños en otro, el que tiene los círculos más grandes se va a ver más pequeño, y el que tiene los círculos más pequeños se verá más grande.
 
 {{< p5-iframe sketch="/vc/sketches/ebbinghaus.js" width="600" height="500" >}}
