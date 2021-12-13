@@ -2,19 +2,23 @@
 <head>
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
-<meta name=description content="Algoritmo de rasterización: Algoritmo de Bresenham #  El algoritmo de Bresenham determina los puntos requeridos para rasterizar una aproximación línea recta. El algoritmo parte de restringir la línea a un solo píxel por columna o fila. Si la restricción se aplica horizontal o verticalmente, depende de la pendiente de la línea trazada. A partir de esta restricción, y teniendo en cuenta los puntos de comienzo y final de la línea, se calculan las coordenadas irrestrictas de los puntos, aproximándose al entero más cercano.">
+<meta name=description content="Ray Tracing #  ¿Conoces lo que es Ray Tracing? #  ¡Bienvenid@s a una investigación sobre rendering y Ray Tracing!
+A continuación vamos a presentar el rendering, para ello vamos primero a introducir el tema, luego ahondaremos en unos conceptos en el marco teórico, explicaremos el algoritmo de Ray Tracing, se explicara el pseudocódigo que le da vida, así como también usos del Ray Tracing en la actualidad.
+¡Lo olvidaba!">
 <meta name=theme-color content="#FFFFFF">
 <meta name=color-scheme content="light dark"><meta property="og:title" content>
-<meta property="og:description" content="Algoritmo de rasterización: Algoritmo de Bresenham #  El algoritmo de Bresenham determina los puntos requeridos para rasterizar una aproximación línea recta. El algoritmo parte de restringir la línea a un solo píxel por columna o fila. Si la restricción se aplica horizontal o verticalmente, depende de la pendiente de la línea trazada. A partir de esta restricción, y teniendo en cuenta los puntos de comienzo y final de la línea, se calculan las coordenadas irrestrictas de los puntos, aproximándose al entero más cercano.">
+<meta property="og:description" content="Ray Tracing #  ¿Conoces lo que es Ray Tracing? #  ¡Bienvenid@s a una investigación sobre rendering y Ray Tracing!
+A continuación vamos a presentar el rendering, para ello vamos primero a introducir el tema, luego ahondaremos en unos conceptos en el marco teórico, explicaremos el algoritmo de Ray Tracing, se explicara el pseudocódigo que le da vida, así como también usos del Ray Tracing en la actualidad.
+¡Lo olvidaba!">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://compuvisualhipermegared.github.io/vc/docs/workshops/rendering/"><meta property="article:section" content="docs">
-<meta property="article:modified_time" content="2021-12-13T09:31:10-05:00">
+<meta property="article:modified_time" content="2021-12-13T10:32:32-05:00">
 <title>Rendering | Visual Computing</title>
 <link rel=manifest href=/vc/manifest.json>
 <link rel=icon href=/vc/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/vc/book.min.89a77f7e702a8626749b948bbfb01109823daf6c1246ca407d1378833494c402.css integrity="sha256-iad/fnAqhiZ0m5SLv7ARCYI9r2wSRspAfRN4gzSUxAI=" crossorigin=anonymous>
 <script defer src=/vc/flexsearch.min.js></script>
-<script defer src=/vc/en.search.min.6257fbd98b9096080bdf930eb2c3dee83dfd838a86078665cd33712fae1563cb.js integrity="sha256-Ylf72YuQlggL35MOssPe6D39g4qGB4ZlzTNxL64VY8s=" crossorigin=anonymous></script>
+<script defer src=/vc/en.search.min.4dbc6f2e599fbedb53be98e83f9087b79e6f9e6d41306ee3f4c562676229927c.js integrity="sha256-TbxvLlmfvttTvpjoP5CHt55vnm1BMG7j9MViZ2Ipknw=" crossorigin=anonymous></script>
 </head>
 <body dir=ltr>
 <input type=checkbox class="hidden toggle" id=menu-control>
@@ -68,17 +72,6 @@
 </li>
 <li>
 <a href=https://compuvisualhipermegared.github.io/vc/docs/shortcodes/p5/iframe/>Iframe</a>
-</li>
-</ul>
-</li>
-<li>
-<input type=checkbox id=section-e590c89a2549a830ec13fb13c97016f6 class=toggle>
-<label for=section-e590c89a2549a830ec13fb13c97016f6 class="flex justify-between">
-<a href=https://compuvisualhipermegared.github.io/vc/docs/shortcodes/Rendering-Workshop/>Rendering Workshop</a>
-</label>
-<ul>
-<li>
-<a href=https://compuvisualhipermegared.github.io/vc/docs/shortcodes/Rendering-Workshop/ray_tracing/>Ray Tracing</a>
 </li>
 </ul>
 </li>
@@ -150,16 +143,82 @@ Blog
 <aside class="hidden clearfix">
 <nav id=TableOfContents>
 <ul>
-<li>
+<li><a href=#ray-tracing>Ray Tracing</a>
 <ul>
+<li><a href=#conoces-lo-que-es-ray-tracing>¿Conoces lo que es Ray Tracing?</a></li>
+<li><a href=#introducción>Introducción</a></li>
+<li><a href=#marco-teórico>Marco Teórico</a></li>
 <li><a href=#algoritmo-de-rasterización-algoritmo-de-bresenham>Algoritmo de rasterización: Algoritmo de Bresenham</a></li>
+<li><a href=#referencias>Referencias:</a></li>
 </ul>
 </li>
 </ul>
 </nav>
 </aside>
 </header>
-<article class=markdown><h2 id=algoritmo-de-rasterización-algoritmo-de-bresenham>
+<article class=markdown><h1 id=ray-tracing>
+Ray Tracing
+<a class=anchor href=#ray-tracing>#</a>
+</h1>
+<h2 id=conoces-lo-que-es-ray-tracing>
+¿Conoces lo que es Ray Tracing?
+<a class=anchor href=#conoces-lo-que-es-ray-tracing>#</a>
+</h2>
+<p>¡Bienvenid@s a una investigación sobre rendering y Ray Tracing!</p>
+<p>A continuación vamos a presentar el rendering, para ello vamos primero a introducir el tema, luego ahondaremos en unos conceptos en el marco teórico, explicaremos el algoritmo de Ray Tracing, se explicara el pseudocódigo que le da vida, así como también usos del Ray Tracing en la actualidad.</p>
+<p>¡Lo olvidaba! Por supuesto, al final encuentras las referencias y bibliografía.</p>
+<p>¡Esperamos que la información presentada sea de tu agrado!</p>
+<h2 id=introducción>
+Introducción
+<a class=anchor href=#introducci%c3%b3n>#</a>
+</h2>
+<p>¿Qué es el rendering?</p>
+<p><img src=http://biblus.accasoftware.com/es/wp-content/uploads/sites/3/2017/05/Rendering-vantaggio_header.jpg alt=Imagen> [Tomado de: <a href=http://biblus.accasoftware.com/es/wp-content/uploads/sites/3/2017/05/Rendering-vantaggio_header.jpg>aquí</a>]</p>
+<p>¿Un algoritmo? ¿Una librería? ¿Una serie de imágenes que nos permiten visualizar un objeto en 3D?</p>
+<p>Pues bueno, el proyecto open source de <a href=https://www.scratchapixel.com/>scratchpixel</a>, nos dice que el rendering es el proceso por el cual una imagen de una escena 3D es creada. Sin importar cuál técnica se use para crear dicho modelo 3D, por lo cual el proceso de renderizado es un paso necesario para crear y visualizar cualquier mundo virtual en 3 dimensiones. Es evidente que dicho proceso es realizado por un computador, por ello áreas como la geometría, la física, cálculo vectorial y la programación son fundamentales para la generación de estás imágenes.</p>
+<p><img src=https://www.scratchapixel.com/images/design/logo_scratchapixel2015.png alt=Imagen2></p>
+<p>[Tomado de: <a href=https://www.scratchapixel.com/images/design/logo_scratchapixel2015.png>aquí</a>]</p>
+<p>Cómo puede llegarse a intuir, el rendering es una tarea computacionalmente costosa, y dicho costo depende de la “cantidad” de geometría aplicada a las escenas que se quieran renderizar, así como de cuán real queremos que se vea nuestra imagen.</p>
+<p>Otro aspecto importante es que existen diferentes tipos de render. En tiempo real y “fuera de línea”. Un ejemplo del primero son los videojuegos, en el cual se tienen que renderizar imágenes a un ritmo de 60 cuadros por segundo, generalmente. Para el caso contrario, encontramos las películas animadas por ejemplo, en donde se renderiza a 24, 30 o 60 cuadros por segundo.</p>
+<p>Ahora bien, con el concepto inicial claro, procedemos a realizar un breve recorrido histórico del rendering y posteriormente profundizaremos en algunos conceptos clave.</p>
+<h2 id=marco-teórico>
+Marco Teórico
+<a class=anchor href=#marco-te%c3%b3rico>#</a>
+</h2>
+<p>Investigadores desde la década de los 70 han trabajado en técnicas para generar imágenes mediante computadores, aprovechando la gran capacidad de procesamiento que poseían las máquinas, inclusive en esa época. La manera que encontraron para solucionar este problema fue la rasterización. Básicamente lo que hicieron fue:</p>
+<ol>
+<li>Generar una imagen en 2 dimensiones, por ejemplo un triángulo (a partir de 3 puntos).</li>
+<li>Suponer que estamos en un espacio 3D y ubicar dicho triángulo en algún lugar del espacio.</li>
+<li>Ubicar una cámara en algún punto del espacio, que será el punto de perspectiva.</li>
+<li>Frente a la cámara, ubicar una grilla donde cada “cuadrado” equivale a un pixel de nuestra imagen a renderizar, es decir, el triángulo.</li>
+<li>Trazar, desde el punto donde está la cámara, líneas hasta cada uno de los vértices del triángulo.</li>
+<li>Los “cuadrados” donde esas líneas intersectan la grilla, serán los límites del triángulo.</li>
+<li>Por último, se itera sobre todos los cuadros de la grilla verificando si cada pixel contiene alguna parte del triángulo proyectado, en caso de ser verdadero “coloree” dicho pixel basado en las propiedades de sombreado y material que aplican al triángulo. Si no, no haga nada.</li>
+</ol>
+<p>De esta manera, se explica brevemente el algoritmo de rasterización, el cual, como se mencionaba anteriormente, fue el inicio de las imágenes generadas por computador.</p>
+<p>Paralelamente, Arthur Appel (1968), quien era un investigador de IBM, presentó una alternativa para la rasterización. Él lo llamó, <a href=https://graphics.stanford.edu/courses/Appel.pdf>Ray Casting</a>.</p>
+<p>Para facilitar la comprensión es importante mencionar que la rasterización es un proceso que se basa en el objeto, porque se dibujan los rayos desde el objeto hasta la cámara; en cambio, Ray Casting se basa en la imagen, acá lo que se busca es lanzar tantos rayos desde la cámara como pixeles se tengan en la grilla.</p>
+<p>Esta técnica soluciona problemas de visibilidad que se presentaban con la rasterización (aunque luego se desarrollaría una técnica llamada Z-Buffer, que genera un mapa de profundidad y compara todos los elementos contra este mapa). Sin embargo, existe un problema con el Ray Casting y es que es necesario comparar cada rayo contra cada objeto y esta fue la razón por la que esta técnica fue ignorada en los 70’s.</p>
+<p>Sin embargo, con el paso de los años no era posible dar respuesta a estas 3 preguntas de manera eficiente con la rasterización:</p>
+<ul>
+<li>¿Cómo se pueden simular sombras?</li>
+<li>¿Cómo se pueden simular refracciones de la luz?</li>
+<li>¿Cómo se pueden simular reflexiones de la luz?</li>
+</ul>
+<p>Es así como en 1980, Turner Whitted, quien trabaja para Bell Labs, publica un paper titulado “An Improved Illumination Model for Shaded Display”, el cual solucionaría las 3 problemáticas que se tenían con la rasterización.</p>
+<p>A continuación se observa la imagen de 512x512 pixeles, que renderizo Whitted con su algoritmo, el cual tardó tan solo&mldr; ¡72 minutos!</p>
+<p><img src=https://digitalartarchive.siggraph.org/wp-content/uploads/2018/08/1981-Turner_Whitted-Untitles-Ray-Traced-Spheres1979.jpg alt=Imagen4> [Tomado de: <a href=https://digitalartarchive.siggraph.org/wp-content/uploads/2018/08/1981-Turner_Whitted-Untitles-Ray-Traced-Spheres1979.jpg>aquí</a>]</p>
+<p>Este paper fue el inicio de “cambio de paradigma” debido a que solucionaba problemas fundamentales que se tenían para la representación del mundo real mediante imágenes generadas por computador.</p>
+<p>Sin embargo, esta no sería la solución a todos los problemas. ¡Qué lástima!</p>
+<p>Ahora, se tenían problemas como el desenfoque de movimiento o motion blur, así como la profundidad de campo o depth of field, que aunque serían relativamente sencillos de resolver, serían una piedra del zapato…</p>
+<p>Aunque eran diminutas, comparadas con la iluminación indirecta, el cual es un fenómeno real que sucede porque la luz rebota no solo en los objetivos que buscamos representar en 3D, si no en los demás elementos del ambiente, por ejemplo una pared.</p>
+<p>Es por eso que James Kajiya, en 1986, con su paper “The Rendering Equation”, usuaria las matemáticas, apoyado en las leyes de la conservación de la energía y las ecuaciones de Maxwell para simular la luz que debería ser percibida en cada pixel de nuestra imagen. Sin embargo, su ecuación presenta una integral que tiene un costo computacional bastante alto de calcular.</p>
+<p>Es por ello que trabajos futuros buscarían alternativas para simplificar este proceso, soluciones como la radiosidad fueron primeras aproximaciones, pero el desarrollo de la integración de Monte Carlo, la cual es un método probabilístico de aproximación donde se soluciona la integral para una gran cantidad de valores aleatorios y luego se calcula el promedio.</p>
+<p>Si bien en las últimas décadas se han generado avances significativos, se tiene la ley de Blinn para tampoco emocionarse tanto, la cual afirma que: “Mientras la tecnología avance, el tiempo de renderizado permanece constante”</p>
+<p>Como hemos observado, los retos surgen constantemente, pero de la misma manera se han producido soluciones que han ayudado a avanzar y llegar a tener imágenes más fieles en cuanto a representación de la realidad se refiere, todo esto, a un precio accesible para los consumidores promedio como tú y como yo.</p>
+<p>Ahora se explica el algoritmo de Ray Tracing de manera más detallada.</p>
+<p><strong>Nota</strong>: Para la sección del marco teórico nos basamos en el guión del video “The Science of Rendering Photorealistic CGI“, el cual se encuentra listado en las referencias.</p>
+<h2 id=algoritmo-de-rasterización-algoritmo-de-bresenham>
 Algoritmo de rasterización: Algoritmo de Bresenham
 <a class=anchor href=#algoritmo-de-rasterizaci%c3%b3n-algoritmo-de-bresenham>#</a>
 </h2>
@@ -182,10 +241,27 @@ Algoritmo de rasterización: Algoritmo de Bresenham
           </body>
         </html>
       "></iframe>
+<h2 id=referencias>
+Referencias:
+<a class=anchor href=#referencias>#</a>
+</h2>
+<ul>
+<li><a href=https://visualcomputing.github.io/Rendering/#/5>https://visualcomputing.github.io/Rendering/#/5</a></li>
+<li><a href=https://graphics.stanford.edu/courses/Appel.pdf>https://graphics.stanford.edu/courses/Appel.pdf</a></li>
+<li><a href=https://www.scratchapixel.com/>https://www.scratchapixel.com/</a></li>
+<li><a href=https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-ray-tracing>https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-ray-tracing</a></li>
+<li><a href=https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-overview>https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-overview</a></li>
+<li><a href=https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle>https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle</a></li>
+<li><a href=https://www.scratchapixel.com/lessons/3d-basic-rendering/intro-rendering-whats-next>https://www.scratchapixel.com/lessons/3d-basic-rendering/intro-rendering-whats-next</a></li>
+<li><a href="https://www.youtube.com/watch?v=Qx_AmlZxzVk&ab_channel=FilmmakerIQ">https://www.youtube.com/watch?v=Qx_AmlZxzVk&ab_channel=FilmmakerIQ</a></li>
+<li><a href=https://www.nvidia.com/es-la/geforce/rtx/>https://www.nvidia.com/es-la/geforce/rtx/</a></li>
+<li><a href=https://developer.nvidia.com/rtx/raytracing>https://developer.nvidia.com/rtx/raytracing</a></li>
+<li><a href=https://www.cgw.com/Press-Center/Web-Exclusives/2013/Blinn-s-Law-and-the-Paradox-of-Increasing-Perfor.aspx>https://www.cgw.com/Press-Center/Web-Exclusives/2013/Blinn-s-Law-and-the-Paradox-of-Increasing-Perfor.aspx</a></li>
+</ul>
 </article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
-<div><a class="flex align-center" href=https://github.com/compuvisualhipermegared/vc/commit/2aaea586a8b19a4d290a2c266dc770bf8a3c29bb title="Last modified by ccgarciab | December 13, 2021" target=_blank rel=noopener>
+<div><a class="flex align-center" href=https://github.com/compuvisualhipermegared/vc/commit/5f528567f52c15b172f8a964da3ec1c4ea7ff81a title="Last modified by KaterineMoon | December 13, 2021" target=_blank rel=noopener>
 <img src=/vc/svg/calendar.svg class=book-icon alt=Calendar>
 <span>December 13, 2021</span>
 </a>
@@ -201,9 +277,13 @@ Algoritmo de rasterización: Algoritmo de Bresenham
 <div class=book-toc-content>
 <nav id=TableOfContents>
 <ul>
-<li>
+<li><a href=#ray-tracing>Ray Tracing</a>
 <ul>
+<li><a href=#conoces-lo-que-es-ray-tracing>¿Conoces lo que es Ray Tracing?</a></li>
+<li><a href=#introducción>Introducción</a></li>
+<li><a href=#marco-teórico>Marco Teórico</a></li>
 <li><a href=#algoritmo-de-rasterización-algoritmo-de-bresenham>Algoritmo de rasterización: Algoritmo de Bresenham</a></li>
+<li><a href=#referencias>Referencias:</a></li>
 </ul>
 </li>
 </ul>
