@@ -51,8 +51,6 @@ Paralelamente, Arthur Appel (1968), quien era un investigador de IBM, presentó 
 
 Para facilitar la comprensión es importante mencionar que la rasterización es un proceso que se basa en el objeto, porque se dibujan los rayos desde el objeto hasta la cámara; en cambio, Ray Casting se basa en la imagen, acá lo que se busca es lanzar tantos rayos desde la cámara como pixeles se tengan en la grilla.
 
-[comment]: <> (![Imagen3](img1.png) [Tomado de: [aquí](https://www.youtube.com/watch?v=Qx_AmlZxzVk&ab_channel=FilmmakerIQ)]) 
-
 Esta técnica soluciona problemas de visibilidad que se presentaban con la rasterización (aunque luego se desarrollaría una técnica llamada Z-Buffer, que genera un mapa de profundidad y compara todos los elementos contra este mapa). Sin embargo, existe un problema con el Ray Casting y es que es necesario comparar cada rayo contra cada objeto y esta fue la razón por la que esta técnica fue ignorada en los 70’s.
 
 Sin embargo, con el paso de los años no era posible dar respuesta a estas 3 preguntas de manera eficiente con la rasterización:
@@ -76,8 +74,6 @@ Ahora, se tenían problemas como el desenfoque de movimiento o motion blur, así
 Aunque eran diminutas, comparadas con la iluminación indirecta, el cual es un fenómeno real que sucede porque la luz rebota no solo en los objetivos que buscamos representar en 3D, si no en los demás elementos del ambiente, por ejemplo una pared.
 
 Es por eso que James Kajiya, en 1986, con su paper “The Rendering Equation”, usuaria las matemáticas, apoyado en las leyes de la conservación de la energía  y las ecuaciones de Maxwell para simular la luz que debería ser percibida en cada pixel de nuestra imagen. Sin embargo, su ecuación presenta una integral que tiene un costo computacional bastante alto de calcular.
-
-[comment]: <> (![Imagen5](/home/jlpinzonr/Escritorio/visual/vc/resources/_gen/images/img2.png) [Tomado de: [aquí](https://www.youtube.com/watch?v=Qx_AmlZxzVk&ab_channel=FilmmakerIQ)])
 
 Es por ello que trabajos futuros buscarían alternativas para simplificar este proceso, soluciones como la radiosidad fueron primeras aproximaciones, pero el desarrollo de la integración de Monte Carlo, la cual es un método probabilístico de aproximación donde se soluciona la integral para una gran cantidad de valores aleatorios y luego se calcula el promedio.
 
