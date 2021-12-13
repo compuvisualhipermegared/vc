@@ -1,22 +1,7 @@
-# Rendering
+## Algoritmo de rasterización: Algoritmo de Bresenham
 
-## Propósito
+El algoritmo de Bresenham determina los puntos requeridos para rasterizar una aproximación línea recta. El algoritmo parte de restringir la línea a un solo píxel por columna o fila. Si la restricción se aplica horizontal o verticalmente, depende de la pendiente de la línea trazada. A partir de esta restricción, y teniendo en cuenta los puntos de comienzo y final de la línea, se calculan las coordenadas irrestrictas de los puntos, aproximándose al entero más cercano.
 
-Realizar indagación teórica-práctica de [rendering](https://visualcomputing.github.io/Rendering).
-
-## Tareas
-
-1. Realizar una indagación teórica de algún [algoritmo de visibilidad](https://en.wikipedia.org/wiki/Hidden-surface_determination) o algún método de [iluminación global](https://en.wikipedia.org/wiki/Global_illumination#List_of_methods).
-2. Implementar la visualización de un algoritmo de rasterización, e.g., [líneas](https://en.wikipedia.org/wiki/Line_drawing_algorithm), [círculos](https://en.wikipedia.org/wiki/Midpoint_circle_algorithm), [antialiasing](https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/rasterization-practical-implementation). [Acá](https://visualcomputing.github.io/docs/rendering/rasterization/#shading) se pueden apreciar visualizaciones para la rasterización de un triángulo que pueden servir de modelo.
-
-## Entrega
-
-Plazo para hacer _commit_ del repositorio a github: 13/12/21 y 6/12/21 a las 24h, grupos 1 y 2 respectivamente.
-
-## Protocolo presentaciones
-
-Exposiciones a ser realizadas la clase siguiente al `push` de 8m: 6m presentación: discusión del reporte subido a su página + 2m preguntas.
-
-## Algoritmo de rasterización
+En la práctica, la verificación del predicado de inclusión se da transformando la ecuación canónica lineal, en una función de dos entradas (las coordenadas), sobre la cual se verifica si el resultado es cero.
 
 {{< p5-iframe sketch="/vc/sketches/bresenham.js" width="600" height="500" >}}
