@@ -16,3 +16,7 @@ Plazo para hacer _commit_ del repositorio a github: 13/12/21 y 6/12/21 a las 24h
 ## Protocolo presentaciones
 
 Exposiciones a ser realizadas la clase siguiente al `push` de 8m: 6m presentación: discusión del reporte subido a su página + 2m preguntas.
+
+## Algoritmo de rasterización
+
+{{< p5-iframe sketch="/vc/sketches/bresenham.js" width="600" height="500" >}}
