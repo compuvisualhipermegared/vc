@@ -23,4 +23,4 @@ Exposiciones a ser realizadas la clase siguiente al `push` de 8m: 6m presentaci√
 
 Shader
 
-{{< p5-iframe sketch="/vc/sketches/quadrille.js" lib1="https://www.cdn.jsdelivr.net/gh/objetos/p5.quadrille.js/p5.quadrille.js" lib2="https://www.cdn.jsdelivr.net/gh/VisualComputing/p5.shaderbox/p5.shaderbox.js" width="675" height="675" >}}
+{{< p5-iframe sketch="/vc/sketches/mosaicHardware.js" width="520" height="520" >}}
