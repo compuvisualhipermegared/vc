@@ -5,12 +5,12 @@ let img;
 
 function preload() {
   theShader = loadShader(
-    '/vc/docs/sketches/shader.vert',
-    '/vc/docs/sketches/mosaicShader.frag',
+    '/vc/sketches/shader.vert',
+    '/vc/sketches/mosaicShader.frag',
   );
-  img = loadImage('/vc/docs/sketches/lenna.png');
-  mosaicImages = loadImage('/vc/docs/sketches/mosaicImages.jpg');
-  indexImages = loadImage('/vc/docs/sketches/indexImage.jpg');
+  img = loadImage('/vc/sketches/lenna.png');
+  mosaicImages = loadImage('/vc/sketches/mosaicImages.jpg');
+  indexImages = loadImage('/vc/sketches/indexImage.jpg');
 }
 
 function setup() {
