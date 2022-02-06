@@ -4,6 +4,8 @@ let theShader;
 let img;
 
 function preload() {
+  video_src = createVideo(['sketches/fingers.webm']);
+  video_src.hide();
   theShader = loadShader(
     '/vc/sketches/shader.vert',
     '/vc/sketches/mosaicShader.frag',
@@ -23,10 +25,16 @@ function setup() {
   video_on.style('color', 'white');
   video_on.changed(() => {
     if (video_on.checked()) {
-      mosaic.setUniform('source', video_src);
+      theShader.setUniform('image', video_src);
+      theShader.setUniform('mosaicImages', mosaicImages);
+      theShader.setUniform('indexImages', indexImages);
+      theShader.setUniform('resolution', 20);
       video_src.loop();
     } else {
-      mosaic.setUniform('source', random(p));
+      theShader.setUniform('image', img);
+      theShader.setUniform('mosaicImages', mosaicImages);
+      theShader.setUniform('indexImages', indexImages);
+      theShader.setUniform('resolution', 20);
       video_src.pause();
     }
   });
@@ -37,7 +45,7 @@ function setup() {
   theShader.setUniform('indexImages', indexImages);
   theShader.setUniform('resolution', 20);
 
-  slider = createSlider(3, 512, 100, 2);
+  slider = createSlider(3, 100, 3, 1);
   slider.position(150, 555);
   slider.style('width', '40%');
   slider.input(() => {
