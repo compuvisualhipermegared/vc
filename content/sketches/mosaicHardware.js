@@ -19,21 +19,35 @@ function setup() {
   textureMode(NORMAL);
   shader(theShader);
 
+  video_on = createCheckbox('Video', false);
+  video_on.style('color', 'white');
+  video_on.changed(() => {
+    if (video_on.checked()) {
+      mosaic.setUniform('source', video_src);
+      video_src.loop();
+    } else {
+      mosaic.setUniform('source', random(p));
+      video_src.pause();
+    }
+  });
+  video_on.position(10, 550);
+
   theShader.setUniform('image', img);
   theShader.setUniform('mosaicImages', mosaicImages);
   theShader.setUniform('indexImages', indexImages);
   theShader.setUniform('resolution', 20);
 
   slider = createSlider(3, 512, 100, 2);
-  slider.position(150, 552);
+  slider.position(150, 555);
   slider.style('width', '40%');
   slider.input(() => {
     theShader.setUniform('resolution', slider.value());
     redraw();
   });
-  let div = createDiv('Resolution');
+  let div = createDiv('Resolución');
   div.style('font-size', '18px');
-  div.position(220, 532);
+  div.style('color', 'white');
+  div.position(220, 535);
 }
 
 function draw() {
