@@ -4,7 +4,7 @@ let theShader;
 let img;
 
 function preload() {
-  video_src = createVideo(['sketches/fingers.webm']);
+  video_src = createVideo(['/vc/sketches/fingers.webm']);
   video_src.hide();
   theShader = loadShader(
     '/vc/sketches/shader.vert',
@@ -21,29 +21,10 @@ function setup() {
   textureMode(NORMAL);
   shader(theShader);
 
-  video_on = createCheckbox('Video', false);
-  video_on.style('color', 'white');
-  video_on.changed(() => {
-    if (video_on.checked()) {
-      theShader.setUniform('image', video_src);
-      theShader.setUniform('mosaicImages', mosaicImages);
-      theShader.setUniform('indexImages', indexImages);
-      theShader.setUniform('resolution', 20);
-      video_src.loop();
-    } else {
-      theShader.setUniform('image', img);
-      theShader.setUniform('mosaicImages', mosaicImages);
-      theShader.setUniform('indexImages', indexImages);
-      theShader.setUniform('resolution', 20);
-      video_src.pause();
-    }
-  });
-  video_on.position(10, 550);
-
   theShader.setUniform('image', img);
   theShader.setUniform('mosaicImages', mosaicImages);
   theShader.setUniform('indexImages', indexImages);
-  theShader.setUniform('resolution', 20);
+  theShader.setUniform('resolution', 3);
 
   slider = createSlider(3, 100, 3, 1);
   slider.position(150, 555);
@@ -52,6 +33,26 @@ function setup() {
     theShader.setUniform('resolution', slider.value());
     redraw();
   });
+
+  video_on = createCheckbox('Video', false);
+  video_on.style('color', 'white');
+  video_on.changed(() => {
+    if (video_on.checked()) {
+      theShader.setUniform('image', video_src);
+      theShader.setUniform('mosaicImages', mosaicImages);
+      theShader.setUniform('indexImages', indexImages);
+      theShader.setUniform('resolution', slider.value());
+      video_src.loop();
+    } else {
+      theShader.setUniform('image', img);
+      theShader.setUniform('mosaicImages', mosaicImages);
+      theShader.setUniform('indexImages', indexImages);
+      theShader.setUniform('resolution', slider.value());
+      video_src.pause();
+    }
+  });
+  video_on.position(10, 550);
+
   let div = createDiv('Resolución');
   div.style('font-size', '18px');
   div.style('color', 'white');
@@ -66,6 +67,4 @@ function draw() {
   vertex(width / 2, height / 2, 0, 1, 1);
   vertex(-width / 2, height / 2, 0, 0, 1);
   endShape(CLOSE);
-
-  noLoop();
 }
