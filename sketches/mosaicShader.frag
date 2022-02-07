@@ -43,7 +43,7 @@ void main(){
 
     }else{
 
-    vec2 tile = vec2((floor(avg(key.rgb) * cols) + fontCoord.s) / cols, fontCoord.t);
+    vec2 tile = vec2((floor(luma(key.rgb) * cols) + fontCoord.s) / cols, fontCoord.t);
     vec4 paletteTexel = texture2D(palette, tile);
     gl_FragColor = color_on ? all(equal(paletteTexel, foreground)) ? key : background : paletteTexel;
 
