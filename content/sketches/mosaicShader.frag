@@ -1,6 +1,14 @@
 precision mediump float;
 
+<<<<<<< HEAD
 uniform sampler2D source;
+=======
+uniform sampler2D image;
+uniform sampler2D mosaicImages;
+uniform sampler2D indexImages;
+uniform float resolution;
+uniform bool symbols;
+>>>>>>> 8442cbb6e20406dc959cd2a83dba9a029fc43e03
 
 uniform sampler2D palette;
 
