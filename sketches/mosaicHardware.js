@@ -1,82 +1,116 @@
-let mosaicImages;
-let indexImages;
-let theShader;
-let img;
+// VARIABLES
+// Imágenes y video
+let images;
+let video;
+
+let mosaicShader;
+let cols;
+let cells;
+let palette;
+
+// User Interface
+let resolution;
+let select;
+let div;
+let video_on;
+let random_image;
+
+const SAMPLE_RES = 30;
 
 function preload() {
-  video_src = createVideo(['/vc/sketches/fingers.webm']);
-  video_src.hide();
-  theShader = loadShader(
-    '/vc/sketches/shader.vert',
-    '/vc/sketches/mosaicShader.frag',
-  );
-  img = loadImage('/vc/sketches/lenna.png');
-  mosaicImages = loadImage('/vc/sketches/mosaicImages.jpg');
-  indexImages = loadImage('/vc/sketches/indexImage.jpg');
+  video = createVideo(['/vc/sketches/schlossbergbahn.webm']);
+  video.hide();
+
+  mosaicShader = readShader('/vc/sketches/mosaicShader.frag');
+
+  images = [];
+  for (let i = 1; i <= 10; i++) {
+    images.push(loadImage(`/vc/sketches/images/img${i}.jpg`));
+  }
 }
 
 function setup() {
   createCanvas(512, 512, WEBGL);
-  noStroke();
+  colorMode(RGB, 1);
   textureMode(NORMAL);
-  shader(theShader);
+  noStroke();
+  shader(mosaicShader);
 
-  theShader.setUniform('image', img);
-  theShader.setUniform('mosaicImages', mosaicImages);
-  theShader.setUniform('indexImages', indexImages);
-  theShader.setUniform('resolution', 3);
-  theShader.setUniform('symbols', true);
+  cells = createQuadrille(images);
 
-  slider = createSlider(3, 100, 3, 1);
-  slider.position(150, 555);
-  slider.style('width', '40%');
-  slider.input(() => {
-    theShader.setUniform('resolution', slider.value());
-    redraw();
-  });
-
+  // Video panel
   video_on = createCheckbox('Video', false);
+  video_on.position(20, 550);
   video_on.style('color', 'white');
   video_on.changed(() => {
     if (video_on.checked()) {
-      theShader.setUniform('image', video_src);
-      theShader.setUniform('mosaicImages', mosaicImages);
-      theShader.setUniform('indexImages', indexImages);
-      theShader.setUniform('resolution', slider.value());
-      video_src.loop();
+      mosaicShader.setUniform('source', video);
+      video.loop();
     } else {
-      theShader.setUniform('image', img);
-      theShader.setUniform('mosaicImages', mosaicImages);
-      theShader.setUniform('indexImages', indexImages);
-      theShader.setUniform('resolution', slider.value());
-      video_src.pause();
+      mosaicShader.setUniform('source', random(images));
+      video.pause();
     }
   });
-  video_on.position(10, 550);
 
-  keys_on = createCheckbox('Keys', false);
-  keys_on.style('color', 'white');
-  keys_on.changed(() => {
-    if (keys_on.checked()) {
-      theShader.setUniform('symbols', false);
-    } else {
-      theShader.setUniform('symbols', true)
-    }
-  });
-  keys_on.position(70, 550);
-
-  let div = createDiv('Resolución');
-  div.style('font-size', '18px');
+  // Slider panel
+  div = createDiv('Resolución');
+  div.position(170, 535);
+  div.style('font-size', '20px');
   div.style('color', 'white');
-  div.position(220, 535);
+
+  resolution = createSlider(3, 100, 3, 1);
+  resolution.position(100, 555);
+  resolution.style('width', '40%');
+  resolution.input(() => {
+    mosaicShader.setUniform('resolution', resolution.value());
+  });
+
+  // Select panel
+  select = createSelect();
+  select.position(325, 555);
+  select.option('AVG');
+  select.option('Luma');
+  select.option('Normal');
+  select.selected('Luma');
+  select.changed(() => {
+    mosaicShader.setUniform('debug', select.value() === 'Normal');
+    mosaicShader.setUniform('avg', select.value() === 'AVG');
+    mosaicShader.setUniform('color_on', false);
+  });
+
+  // Button panel
+  random_image = createButton('Cambiar imagen');
+  random_image.position(400, 554);
+  random_image.mousePressed(changeImg);
+
+  mosaicShader.setUniform('source', random(images));
+  mosaicShader.setUniform('resolution', resolution.value());
+  mosaicShader.setUniform('cols', cells.width);
+  palette = createGraphics(SAMPLE_RES * cells.width, SAMPLE_RES);
+  sample();
+}
+
+function changeImg() {
+  if (!video_on.checked()) {
+    mosaicShader.setUniform('source', random(images));
+  }
+}
+
+function sample() {
+  if (palette.width !== SAMPLE_RES * cells.width) {
+    palette = createGraphics(SAMPLE_RES * cells.width, SAMPLE_RES);
+    mosaicShader.setUniform('cols', cells.width);
+  }
+
+  cells.sort({ ascending: true, cellLength: SAMPLE_RES });
+  drawQuadrille(cells, {
+    graphics: palette,
+    cellLength: SAMPLE_RES,
+    outlineWeight: 0,
+  });
+  mosaicShader.setUniform('palette', palette);
 }
 
 function draw() {
-  background(0);
-  beginShape();
-  vertex(-width / 2, -height / 2, 0, 0, 0);
-  vertex(width / 2, -height / 2, 0, 1, 0);
-  vertex(width / 2, height / 2, 0, 1, 1);
-  vertex(-width / 2, height / 2, 0, 0, 1);
-  endShape(CLOSE);
+  cover({ texture: true });
 }
