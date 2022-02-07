@@ -4,6 +4,7 @@ uniform sampler2D image;
 uniform sampler2D mosaicImages;
 uniform sampler2D indexImages;
 uniform float resolution;
+uniform bool symbols;
 
 varying vec2 vTexCoord;
 
@@ -98,5 +99,10 @@ void main() {
 
   float imageHeight = (float(closest)) / 277.0;
 
-  gl_FragColor = texture2D(mosaicImages, symbolCoord + vec2(0.0, imageHeight));
+  if(symbols){
+    gl_FragColor = texture2D(mosaicImages, symbolCoord + vec2(0.0, imageHeight));
+  }
+  else{
+    gl_FragColor = texture2D(indexImages, symbolCoord + vec2(0.0, imageHeight));
+  }
 }

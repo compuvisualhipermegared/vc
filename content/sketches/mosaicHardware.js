@@ -25,6 +25,7 @@ function setup() {
   theShader.setUniform('mosaicImages', mosaicImages);
   theShader.setUniform('indexImages', indexImages);
   theShader.setUniform('resolution', 3);
+  theShader.setUniform('symbols', true);
 
   slider = createSlider(3, 100, 3, 1);
   slider.position(150, 555);
@@ -52,6 +53,17 @@ function setup() {
     }
   });
   video_on.position(10, 550);
+
+  keys_on = createCheckbox('Keys', false);
+  keys_on.style('color', 'white');
+  keys_on.changed(() => {
+    if (keys_on.checked()) {
+      theShader.setUniform('symbols', false);
+    } else {
+      theShader.setUniform('symbols', true)
+    }
+  });
+  keys_on.position(70, 550);
 
   let div = createDiv('Resolución');
   div.style('font-size', '18px');
