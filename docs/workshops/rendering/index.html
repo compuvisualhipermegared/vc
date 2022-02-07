@@ -12,13 +12,13 @@ A continuación vamos a presentar el rendering, para ello vamos primero a introd
 ¡Lo olvidaba!">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://compuvisualhipermegared.github.io/vc/docs/workshops/rendering/"><meta property="article:section" content="docs">
-<meta property="article:modified_time" content="2021-12-13T10:32:32-05:00">
+<meta property="article:modified_time" content="2022-02-06T23:44:47-05:00">
 <title>Rendering | Visual Computing</title>
 <link rel=manifest href=/vc/manifest.json>
 <link rel=icon href=/vc/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/vc/book.min.89a77f7e702a8626749b948bbfb01109823daf6c1246ca407d1378833494c402.css integrity="sha256-iad/fnAqhiZ0m5SLv7ARCYI9r2wSRspAfRN4gzSUxAI=" crossorigin=anonymous>
 <script defer src=/vc/flexsearch.min.js></script>
-<script defer src=/vc/en.search.min.294ee8fca4c11fc674ff8e149bdc4104c4a07054ef4a5294ab032e4de531d470.js integrity="sha256-KU7o/KTBH8Z0/44Um9xBBMSgcFTvSlKUqwMuTeUx1HA=" crossorigin=anonymous></script>
+<script defer src=/vc/en.search.min.6c7907fa126213a4b64838ca6693d702ab37fd0ca26bde7a38d30660ed59e5dc.js integrity="sha256-bHkH+hJiE6S2SDjKZpPXAqs3/Qyia956ONMGYO1Z5dw=" crossorigin=anonymous></script>
 </head>
 <body dir=ltr>
 <input type=checkbox class="hidden toggle" id=menu-control>
@@ -151,6 +151,7 @@ Blog
 <li><a href=#conoces-lo-que-es-ray-tracing>¿Conoces lo que es Ray Tracing?</a></li>
 <li><a href=#introducción>Introducción</a></li>
 <li><a href=#marco-teórico>Marco Teórico</a></li>
+<li><a href=#algoritmo-de-ray-tracing>Algoritmo de Ray Tracing</a></li>
 <li><a href=#algoritmo-de-rasterización-algoritmo-de-bresenham>Algoritmo de rasterización: Algoritmo de Bresenham</a></li>
 <li><a href=#referencias>Referencias:</a></li>
 </ul>
@@ -221,7 +222,47 @@ Marco Teórico
 <p>Como hemos observado, los retos surgen constantemente, pero de la misma manera se han producido soluciones que han ayudado a avanzar y llegar a tener imágenes más fieles en cuanto a representación de la realidad se refiere, todo esto, a un precio accesible para los consumidores promedio como tú y como yo.</p>
 <p>Ahora se explica el algoritmo de Ray Tracing de manera más detallada.</p>
 <p><strong>Nota</strong>: Para la sección del marco teórico nos basamos en el guión del video “The Science of Rendering Photorealistic CGI“, el cual se encuentra listado en las referencias.</p>
-<h2 id=algoritmo-de-rasterización-algoritmo-de-bresenham>
+<h2 id=algoritmo-de-ray-tracing>
+Algoritmo de Ray Tracing
+<a class=anchor href=#algoritmo-de-ray-tracing>#</a>
+</h2>
+<p>Es una técnica que consiste en simular de forma simplificada el comportamiento de los rayos de luz
+que inciden sobre un objeto y que son vistos por un observador. El algoritmo traza los rayos desde el
+observador procesando las posibles intersecciones de ese rayo con los objetos y trazándose nuevamente otro rayo si es necesario para los fectos de reflexión o refracción.</p>
+<p>El componente mas importante de esta técnica es el observador, porque es de donde salen los rayos y dicta cómo será la imagen final, basado en:</p>
+<ol>
+<li>El tipo de proyección: Puede ser central o paralela. El primero consiste en tener un punto fijo y desde él trazar los rayos hacia la escena, mientras que el segundo traza los rayos de forma paralela al osbservador que va cambiando su posición.</li>
+</ol>
+<p><img src=https://www.ecured.cu/images/7/77/Proyeccin_tipos.png alt=Imagen5> [Tomado de: <a href=https://www.ecured.cu/images/7/77/Proyeccin_tipos.png>ecured</a>]</p>
+<ol start=2>
+<li>
+<p>El vector que indica cuál es el arriba para el observador</p>
+</li>
+<li>
+<p>La distancia mínima y máxima</p>
+</li>
+</ol>
+<p>Este algoritmo lo que hace es ir pixel por pixel de la imagen y le va pasando el rayo que sale desde el observador, cuando se intersecta con un elemento se le aplica un modelo de color para diferenciarlo del fondo de la imagen y un modelo de iluminación para determinar el proceso de reflexión de la luz que se refleja hacia el observador.</p>
+<p><img src=https://www.scratchapixel.com/images/upload/ray-tracing-refresher/rt-setup2.png alt=Imagen6> [Tomado de: <a href=https://www.scratchapixel.com/images/upload/ray-tracing-refresher/rt-setup2.png>scratchapixel</a>]</p>
+<p>A continuación se muestra el pseudo código de este algoritmo</p>
+<pre tabindex=0><code>// loop over all pixels
+Vec3f *framebuffer = new Vec3f[imageWidth * imageHeight]; 
+for (int j = 0; j &lt; imageHeight; ++j) { 
+    for (int i = 0; i &lt; imageWidth; ++i) { 
+        for (int k = 0; k &lt; numObjectsInScene; ++k) { 
+            Ray ray = buildCameraRay(i, j); 
+            if (intersect(ray, objects[k]) { 
+                // do complex shading here but for now basic (just constant color)
+                framebuffer[j * imageWidth + i] = objects[k].color; 
+            } 
+            else { 
+                // or don't do anything and leave it black
+                framebuffer[j * imageWidth + i] = backgroundColor; 
+            } 
+        } 
+    } 
+} 
+</code></pre><h2 id=algoritmo-de-rasterización-algoritmo-de-bresenham>
 Algoritmo de rasterización: Algoritmo de Bresenham
 <a class=anchor href=#algoritmo-de-rasterizaci%c3%b3n-algoritmo-de-bresenham>#</a>
 </h2>
@@ -260,13 +301,14 @@ Referencias:
 <li><a href=https://www.nvidia.com/es-la/geforce/rtx/>https://www.nvidia.com/es-la/geforce/rtx/</a></li>
 <li><a href=https://developer.nvidia.com/rtx/raytracing>https://developer.nvidia.com/rtx/raytracing</a></li>
 <li><a href=https://www.cgw.com/Press-Center/Web-Exclusives/2013/Blinn-s-Law-and-the-Paradox-of-Increasing-Perfor.aspx>https://www.cgw.com/Press-Center/Web-Exclusives/2013/Blinn-s-Law-and-the-Paradox-of-Increasing-Perfor.aspx</a></li>
+<li><a href=https://repositorio.utp.edu.co/dspace/bitstream/handle/11059/5385/0066M779%20_Anexo.pdf>https://repositorio.utp.edu.co/dspace/bitstream/handle/11059/5385/0066M779%20_Anexo.pdf</a></li>
 </ul>
 </article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
-<div><a class="flex align-center" href=https://github.com/compuvisualhipermegared/vc/commit/5f528567f52c15b172f8a964da3ec1c4ea7ff81a title="Last modified by KaterineMoon | December 13, 2021" target=_blank rel=noopener>
+<div><a class="flex align-center" href=https://github.com/compuvisualhipermegared/vc/commit/b6481df1d4b71f6d87e465a6d395cbcbfd2213ed title="Last modified by KaterineMoon | February 7, 2022" target=_blank rel=noopener>
 <img src=/vc/svg/calendar.svg class=book-icon alt=Calendar>
-<span>December 13, 2021</span>
+<span>February 7, 2022</span>
 </a>
 </div>
 </div>
@@ -285,6 +327,7 @@ Referencias:
 <li><a href=#conoces-lo-que-es-ray-tracing>¿Conoces lo que es Ray Tracing?</a></li>
 <li><a href=#introducción>Introducción</a></li>
 <li><a href=#marco-teórico>Marco Teórico</a></li>
+<li><a href=#algoritmo-de-ray-tracing>Algoritmo de Ray Tracing</a></li>
 <li><a href=#algoritmo-de-rasterización-algoritmo-de-bresenham>Algoritmo de rasterización: Algoritmo de Bresenham</a></li>
 <li><a href=#referencias>Referencias:</a></li>
 </ul>
