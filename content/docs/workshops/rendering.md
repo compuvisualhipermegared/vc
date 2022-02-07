@@ -85,6 +85,49 @@ Ahora se explica el algoritmo de Ray Tracing de manera más detallada.
 
 **Nota**: Para la sección del marco teórico nos basamos en el guión del video “The Science of Rendering Photorealistic CGI“, el cual se encuentra listado en las referencias.
 
+## Algoritmo de Ray Tracing
+
+Es una técnica que consiste en simular de forma simplificada el comportamiento de los rayos de luz
+que inciden sobre un objeto y que son vistos por un observador. El algoritmo traza los rayos desde el
+observador procesando las posibles intersecciones de ese rayo con los objetos y trazándose nuevamente otro rayo si es necesario para los fectos de reflexión o refracción.
+
+
+El componente mas importante de esta técnica es el observador, porque es de donde salen los rayos y dicta cómo será la imagen final, basado en:
+
+1. El tipo de proyección: Puede ser central o paralela. El primero consiste en tener un punto fijo y desde él trazar los rayos hacia la escena, mientras que el segundo traza los rayos de forma paralela al osbservador que va cambiando su posición.
+
+![Imagen5](https://www.ecured.cu/images/7/77/Proyeccin_tipos.png)  [Tomado de: [ecured](https://www.ecured.cu/images/7/77/Proyeccin_tipos.png)]
+
+2. El vector que indica cuál es el arriba para el observador
+
+3. La distancia mínima y máxima
+
+Este algoritmo lo que hace es ir pixel por pixel de la imagen y le va pasando el rayo que sale desde el observador, cuando se intersecta con un elemento se le aplica un modelo de color para diferenciarlo del fondo de la imagen y un modelo de iluminación para determinar el proceso de reflexión de la luz que se refleja hacia el observador.
+
+![Imagen6](https://www.scratchapixel.com/images/upload/ray-tracing-refresher/rt-setup2.png)  [Tomado de: [scratchapixel](https://www.scratchapixel.com/images/upload/ray-tracing-refresher/rt-setup2.png)]
+
+A continuación se muestra el pseudo código de este algoritmo
+
+```
+// loop over all pixels
+Vec3f *framebuffer = new Vec3f[imageWidth * imageHeight]; 
+for (int j = 0; j < imageHeight; ++j) { 
+    for (int i = 0; i < imageWidth; ++i) { 
+        for (int k = 0; k < numObjectsInScene; ++k) { 
+            Ray ray = buildCameraRay(i, j); 
+            if (intersect(ray, objects[k]) { 
+                // do complex shading here but for now basic (just constant color)
+                framebuffer[j * imageWidth + i] = objects[k].color; 
+            } 
+            else { 
+                // or don't do anything and leave it black
+                framebuffer[j * imageWidth + i] = backgroundColor; 
+            } 
+        } 
+    } 
+} 
+```
+
 ## Algoritmo de rasterización: Algoritmo de Bresenham
 
 El algoritmo de Bresenham determina los puntos requeridos para rasterizar una aproximación línea recta. El algoritmo parte de restringir la línea a un solo píxel por columna o fila. Si la restricción se aplica horizontal o verticalmente, depende de la pendiente de la línea trazada. A partir de esta restricción, y teniendo en cuenta los puntos de comienzo y final de la línea, se calculan las coordenadas irrestrictas de los puntos, aproximándose al entero más cercano.
@@ -107,3 +150,4 @@ En la práctica, la verificación del predicado de inclusión se da transformand
 * https://www.nvidia.com/es-la/geforce/rtx/ 
 * https://developer.nvidia.com/rtx/raytracing 
 * https://www.cgw.com/Press-Center/Web-Exclusives/2013/Blinn-s-Law-and-the-Paradox-of-Increasing-Perfor.aspx
+* https://repositorio.utp.edu.co/dspace/bitstream/handle/11059/5385/0066M779%20_Anexo.pdf

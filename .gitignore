@@ -1,5 +1,6 @@
 /public/
 /resources/_gen/
+/.history
 # Backup Files
 *.md~
 # Logs
