@@ -21,9 +21,7 @@ varying vec4 xVertexColor;
 varying vec2 vTexCoord;
 
 float luma(vec3 color){
-
     return 0.299 * color.r + 0.587 * color.g + 0.114 * color.b;
-
 }
 
 float avg(vec3 color){

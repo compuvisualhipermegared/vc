@@ -24,7 +24,7 @@ function preload() {
   mosaicShader = readShader('/vc/sketches/mosaicShader.frag');
 
   images = [];
-  for (let i = 1; i <= 10; i++) {
+  for (let i = 1; i <= 30; i++) {
     images.push(loadImage(`/vc/sketches/images/img${i}.jpg`));
   }
 }
